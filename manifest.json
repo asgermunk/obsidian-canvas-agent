@@ -1,0 +1,9 @@
+{
+  "id": "canvas-agent",
+  "name": "Canvas Agent",
+  "version": "0.1.0",
+  "minAppVersion": "1.5.0",
+  "description": "Pull Canvas modules and let Claude write study notes and answer questions from your vault.",
+  "author": "asgermunk",
+  "isDesktopOnly": true
+}

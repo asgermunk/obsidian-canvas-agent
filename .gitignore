@@ -1,0 +1,5 @@
+node_modules/
+main.js
+debug.log
+data.json
+.vault-path

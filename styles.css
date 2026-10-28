@@ -1,0 +1,64 @@
+.canvas-agent {
+	display: flex;
+	flex-direction: column;
+	gap: var(--size-4-2);
+	padding: var(--size-4-2);
+}
+
+.canvas-agent-bar {
+	display: flex;
+	gap: var(--size-4-2);
+}
+
+.canvas-agent-messages {
+	flex: 1;
+	overflow-y: auto;
+	display: flex;
+	flex-direction: column;
+	gap: var(--size-4-2);
+}
+
+.canvas-agent-msg {
+	padding: var(--size-4-2) var(--size-4-3);
+	border-radius: var(--radius-m);
+	user-select: text;
+}
+
+.canvas-agent-msg > :first-child { margin-top: 0; }
+.canvas-agent-msg > :last-child { margin-bottom: 0; }
+
+.canvas-agent-user {
+	align-self: flex-end;
+	background: var(--background-modifier-hover);
+	white-space: pre-wrap;
+}
+
+.canvas-agent-files {
+	background: var(--background-secondary);
+	font-size: var(--font-ui-small);
+}
+
+.canvas-agent-error {
+	color: var(--text-normal);
+	background: rgba(var(--color-red-rgb), 0.12);
+	border-left: 3px solid var(--color-red);
+	white-space: pre-wrap;
+	font-size: var(--font-ui-small);
+}
+
+.canvas-agent-status {
+	color: var(--text-muted);
+	font-size: var(--font-ui-small);
+	font-style: italic;
+}
+
+.canvas-agent-input {
+	display: flex;
+	gap: var(--size-4-2);
+	align-items: flex-end;
+}
+
+.canvas-agent-input textarea {
+	flex: 1;
+	resize: vertical;
+}

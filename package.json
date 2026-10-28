@@ -1,0 +1,22 @@
+{
+  "name": "obsidian-canvas-agent",
+  "version": "0.1.0",
+  "description": "Obsidian plugin: Claude Agent SDK + Canvas LMS",
+  "scripts": {
+    "build": "tsc && node esbuild.config.mjs",
+    "dev": "node esbuild.config.mjs --watch",
+    "deploy": "npm run build && node scripts/install.mjs"
+  },
+  "dependencies": {
+    "@anthropic-ai/claude-agent-sdk": "^0.3.312",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.43",
+    "builtin-modules": "^5.4.0",
+    "esbuild": "^0.28.2",
+    "obsidian": "^1.14.4",
+    "typescript": "^7.0.2"
+  },
+  "private": true
+}
