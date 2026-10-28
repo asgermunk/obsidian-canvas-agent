@@ -9,6 +9,7 @@ export interface RunnerConfig {
 	model: string;
 	apiKey: string | null;
 	canvasServer: () => Promise<McpSdkServerConfigWithInstance>;
+	vaultServer: (onWrite: (rel: string) => void) => Promise<McpSdkServerConfigWithInstance>;
 	logFile: string;
 }
 
@@ -18,7 +19,8 @@ export interface RunHandlers {
 	onWrite(path: string): void;
 }
 
-const READ_ONLY_TOOLS = [
+// Approved without the guard. The plugin's own tools check vault paths themselves.
+const PRE_APPROVED_TOOLS = [
 	"Read",
 	"Glob",
 	"Grep",
@@ -30,6 +32,7 @@ const READ_ONLY_TOOLS = [
 	"mcp__canvas__list_modules",
 	"mcp__canvas__get_module",
 	"mcp__canvas__download_file",
+	"mcp__vault__move",
 ];
 
 /** One chat thread with Claude. Each send() resumes the same session, so follow-ups keep context. */
@@ -87,8 +90,8 @@ export class AgentRunner {
 					systemPrompt: { type: "preset", preset: "claude_code", append: CANVAS_AGENT_PROMPT },
 					model: cfg.model || undefined,
 					env,
-					mcpServers: { canvas: await cfg.canvasServer() },
-					allowedTools: READ_ONLY_TOOLS,
+					mcpServers: { canvas: await cfg.canvasServer(), vault: await cfg.vaultServer(h.onWrite) },
+					allowedTools: PRE_APPROVED_TOOLS,
 					canUseTool: makeGuard(cfg.vaultRoot, h.onWrite),
 					abortController: this.abort,
 					resume: this.sessionId,
@@ -161,7 +164,10 @@ function describeTool(name: string, input: Record<string, unknown>): string {
 			return `Searching the web: ${input.query}`;
 		case "WebFetch":
 			return `Fetching ${input.url}`;
+		case "mcp__vault__move":
+			return `Moving ${short(input.from)} → ${short(input.to)}`;
 		case "Bash":
+		case "PowerShell":
 			return "Running a vault script";
 		default:
 			return name.startsWith("mcp__canvas__") ? `Canvas: ${name.slice(13).replace(/_/g, " ")}` : name;

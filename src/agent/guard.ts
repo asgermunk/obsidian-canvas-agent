@@ -32,13 +32,17 @@ export function makeGuard(vaultRoot: string, onWrite: (rel: string) => void): Ca
 			onWrite(rel.replace(/\\/g, "/"));
 			return { behavior: "allow", updatedInput: input };
 		}
-		if (toolName === "Bash") {
+		// On Windows Claude Code runs shell commands through a PowerShell tool instead of Bash.
+		if (toolName === "Bash" || toolName === "PowerShell") {
 			const cmd = String(input.command ?? "");
 			// The vault skills ship small read-only python helpers (extract_pptx, check_vault, vault_index).
 			if (/^python3?\s+(-I\s+)?"?\.claude[\\/]skills[\\/][\w-]+[\\/]scripts[\\/][\w-]+\.py"?(\s|$)/.test(cmd) && !/[;&|`$><]/.test(cmd)) {
 				return { behavior: "allow", updatedInput: input };
 			}
-			return { behavior: "deny", message: "Only the python scripts in .claude/skills/*/scripts may run." };
+			return {
+				behavior: "deny",
+				message: "Only the python scripts in .claude/skills/*/scripts may run. To move or rename a file, use mcp__vault__move.",
+			};
 		}
 		return { behavior: "deny", message: `${toolName} is not available in Canvas Agent.` };
 	};

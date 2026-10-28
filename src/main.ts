@@ -3,6 +3,7 @@ import { CanvasClient } from "./canvas/client";
 import { canvasMcpServer } from "./canvas/tools";
 import { setProtectedDirs } from "./agent/guard";
 import { AgentRunner } from "./agent/runner";
+import { vaultMcpServer } from "./agent/vaultTools";
 import { CanvasAgentSettings, CanvasAgentSettingTab, DEFAULT_SETTINGS, Secrets } from "./settings";
 import { ChatView, VIEW_TYPE } from "./ui/ChatView";
 import { pickModule } from "./ui/pickers";
@@ -28,6 +29,7 @@ export default class CanvasAgentPlugin extends Plugin {
 			model: this.settings.model,
 			apiKey: this.secrets.anthropicKey(),
 			canvasServer: () => canvasMcpServer(this.app, this.canvas()),
+			vaultServer: (onWrite) => vaultMcpServer(this.app, onWrite),
 			logFile: `${adapter.getBasePath()}/${this.manifest.dir}/debug.log`,
 		}));
 
